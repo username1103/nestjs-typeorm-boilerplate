@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { ResponseStatus } from './ResponseStatus';
+import { ResponseStatus } from './response-status';
 
 export class ResponseEntity<T> {
   @Exclude() private readonly _status: string;
