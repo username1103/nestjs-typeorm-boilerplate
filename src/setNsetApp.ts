@@ -2,12 +2,15 @@ import { ClassSerializerInterceptor, INestApplication, ValidationPipe, Versionin
 import { Reflector } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
 import { BadParameterException } from './common/exception/bad-parameter.exception';
+import { AllExceptionFilter } from './common/filter/all-exception.filter';
 
 export function setNestApp(app: INestApplication) {
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
   });
+
+  app.useGlobalFilters(new AllExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
