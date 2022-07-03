@@ -60,5 +60,14 @@ describe('MySQL Config Module Test', () => {
       // then
       expect(password).toEqual(process.env.MYSQL_PASSWORD);
     });
+    test('MYSQL_CONNECTION_TIMEOUT를 반환하는가', async () => {
+      // given
+
+      // when
+      const maxConnectionTimeout = mysqlConfigService.maxConnectionTimeout;
+
+      // then
+      expect(maxConnectionTimeout).toEqual(parseInt(process.env.MYSQL_CONNECTION_TIMEOUT, 10));
+    });
   });
 });
