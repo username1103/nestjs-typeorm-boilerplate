@@ -1,5 +1,4 @@
 import { Test } from '@nestjs/testing';
-import { Environment } from '../../enviroment';
 import { AppConfigModule } from './config.module';
 import { AppConfigService } from './config.service';
 
@@ -22,10 +21,10 @@ describe('App Config Module Test', () => {
       const env = appConfigService.env;
 
       // then
-      expect(env).toEqual(Environment.Test);
+      expect(env).toEqual(process.env.NODE_ENV);
     });
 
-    test('PORT를 적절히 반환하는가', async () => {
+    test('PORT를 반환하는가', async () => {
       // given
 
       // when
