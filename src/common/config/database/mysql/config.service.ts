@@ -25,4 +25,7 @@ export class MysqlConfigService {
   get dbName() {
     return this.configService.get('MYSQL_DATABASE', { infer: true });
   }
+  get maxConnectionTimeout() {
+    return this.configService.get('MYSQL_CONNECTION_TIMEOUT', { infer: true });
+  }
 }

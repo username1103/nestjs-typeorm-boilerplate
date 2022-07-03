@@ -21,6 +21,10 @@ export class MysqlConfig {
   @Expose()
   @IsString()
   MYSQL_DATABASE: string;
+
+  @Expose()
+  @IsNumber()
+  MYSQL_CONNECTION_TIMEOUT: number;
 }
 
 export const validate = (config: Record<string, unknown>) => {
