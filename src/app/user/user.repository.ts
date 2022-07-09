@@ -17,4 +17,9 @@ export class UserRepository extends Repository<User> {
 
     return user;
   }
+
+  async isExistEamil(email: string) {
+    const user = await this.findOneBy({ email });
+    return !!user;
+  }
 }

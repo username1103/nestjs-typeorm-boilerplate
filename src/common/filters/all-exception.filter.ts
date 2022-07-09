@@ -24,6 +24,9 @@ export class AllExceptionFilter implements ExceptionFilter {
     const responseEntity = this.getResponse(convertedExpection);
     const status = convertedExpection.getStatus();
 
+    // TODO: 프로덕션이 아닌 경우, 에러 로깅 필요
+    // TODO: 에러테이블 생성 및 저장
+
     response.status(status).json(instanceToPlain(responseEntity));
   }
 
