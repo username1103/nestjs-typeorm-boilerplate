@@ -10,6 +10,7 @@ export const setSwagger = (app: INestApplication) => {
     .setTitle('Wanted-Pre-Onboarding REST API')
     .setVersion('1.0.0')
     .addServer(`http://localhost:${appConfigService.port}`)
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'bearerAuth')
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

@@ -3,12 +3,13 @@ import { ApiResponse, ApiResponseOptions, getSchemaPath } from '@nestjs/swagger'
 import { instanceToPlain } from 'class-transformer';
 import { ResponseEntity } from '../response/response-entity';
 
-export function ApiErrorResponse(...errors: HttpException[]) {
+export function ApiErrorResponse(...errors: { new (): HttpException }[]) {
   const apiResponses = {};
 
   errors.forEach((error) => {
-    const status = error.getStatus();
-    const response: any = error.getResponse();
+    const errorInstance = new error();
+    const status = errorInstance.getStatus();
+    const response: any = errorInstance.getResponse();
     if (!apiResponses[status]) {
       apiResponses[status] = {
         status,
