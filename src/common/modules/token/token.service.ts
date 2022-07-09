@@ -4,7 +4,7 @@ import { plainToInstance } from 'class-transformer';
 import moment, { Moment } from 'moment';
 import { User } from '../../../app/user/user.entity';
 import { JwtConfigService } from '../../config/jwt/config.service';
-import { InvalidTokenException } from '../../exception/invalid-token.exception';
+import { InvalidTokenException } from '../../exceptions/invalid-token.exception';
 import { TokenPayload } from './type/token-payload';
 import { TokenType } from './type/token-type';
 

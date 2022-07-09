@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { UserNotFoudnException } from '../../common/exception/user-not-found.exception';
+import { UserNotFoudnException } from '../../common/exceptions/user-not-found.exception';
 import { User } from './user.entity';
 
 @Injectable()

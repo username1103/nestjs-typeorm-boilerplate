@@ -1,8 +1,8 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
-import { BadParameterException } from './common/exception/bad-parameter.exception';
-import { AllExceptionFilter } from './common/filter/all-exception.filter';
+import { BadParameterException } from './common/exceptions/bad-parameter.exception';
+import { AllExceptionFilter } from './common/filters/all-exception.filter';
 
 export function setNestApp(app: INestApplication) {
   app.enableVersioning({

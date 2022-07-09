@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { instanceToPlain } from 'class-transformer';
 import { Response } from 'express';
-import { ApiNotFoundException } from '../exception/api-not-found.exception';
-import { BadParameterException } from '../exception/bad-parameter.exception';
-import { ErrorInfo } from '../exception/error-info';
+import { ApiNotFoundException } from '../exceptions/api-not-found.exception';
+import { BadParameterException } from '../exceptions/bad-parameter.exception';
+import { ErrorInfo } from '../exceptions/error-info';
 import { ResponseEntity } from '../response/response-entity';
 
 @Catch()
