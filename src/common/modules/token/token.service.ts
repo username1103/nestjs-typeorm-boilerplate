@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import moment, { Moment } from 'moment';
+import { Repository } from 'typeorm';
 import { User } from '../../../app/user/user.entity';
 import { JwtConfigService } from '../../config/jwt/config.service';
 import { InvalidTokenException } from '../../exceptions/invalid-token.exception';
+import { Token } from './token.entity';
 import { TokenPayload } from './type/token-payload';
 import { TokenType } from './type/token-type';
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly jwtService: JwtService, private readonly jwtConfigService: JwtConfigService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly jwtConfigService: JwtConfigService,
+    @InjectRepository(Token)
+    private readonly tokenRepository: Repository<Token>,
+  ) {}
 
   private generateToken(sub: number, exp: Moment, type: TokenType) {
     const payload: TokenPayload = {
@@ -29,7 +37,8 @@ export class TokenService {
     const refreshTokenExpires = moment().add(this.jwtConfigService.refreshTokenExpireDays, 'days');
     const refreshToken = this.generateToken(user.id, refreshTokenExpires, TokenType.REFRESH);
 
-    // TODO: 리프레시 토큰을 저장하게 된다면, 저장로직이 필요하다. 발급시 또는 TokenService를 사용하는 Service에서 저장로직이 필요하다.
+    const token = Token.of(refreshToken, TokenType.REFRESH, user);
+    await this.tokenRepository.save(token);
 
     return {
       accessToken,
@@ -38,7 +47,7 @@ export class TokenService {
     };
   }
 
-  verifyToken(token: string, tokenType: TokenType) {
+  verifyRefreshToken(token: string, tokenType: TokenType) {
     try {
       const payload = this.jwtService.verify(token);
       const convertedPaylaod = plainToInstance(TokenPayload, payload);

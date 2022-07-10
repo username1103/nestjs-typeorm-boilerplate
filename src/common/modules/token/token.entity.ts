@@ -18,6 +18,14 @@ export class Token extends BaseEntity {
   @ManyToOne(() => User, { lazy: true })
   user: Promise<User>;
 
+  static of(token: string, type: TokenType, user: User) {
+    const entity = new Token();
+    entity.token = token;
+    entity.type = type;
+    entity.user = Promise.resolve(user);
+    return entity;
+  }
+
   setBlackList() {
     this.isBlackList = true;
   }

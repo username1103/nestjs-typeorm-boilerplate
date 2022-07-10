@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import * as path from 'path';
+import path from 'path';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppConfigService } from '../../app/config.service';
 import { MysqlConfigService } from '../mysql/config.service';
@@ -25,8 +25,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.mysqlConfigService.dbName,
       logging: this.appConfigService.isDevelopment() ? 'all' : ['error', 'warn'],
       entities: [entityPath],
-      dropSchema: this.appConfigService.isTest() ? true : false,
-      synchronize: this.appConfigService.isProduction() ? false : true,
+      dropSchema: this.appConfigService.isTest(),
+      synchronize: !this.appConfigService.isProduction(),
       namingStrategy: new SnakeNamingStrategy(),
       maxQueryExecutionTime: this.mysqlConfigService.maxConnectionTimeout,
     };
