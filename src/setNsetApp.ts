@@ -7,6 +7,9 @@ import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ErrorLoggerInterceptor } from './common/interceptors/error-logger.interceptor';
 
 export function setNestApp(app: INestApplication) {
+  // TODO: 클라이언트 origin 설정필요
+  app.enableCors();
+
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
