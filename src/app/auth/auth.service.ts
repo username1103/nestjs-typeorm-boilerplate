@@ -15,7 +15,7 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async signup({ email, password }: { email: string; password: string }) {
+  async signup({ email, password, nickname }: { email: string; password: string; nickname: string }) {
     if (await this.userRepository.isExistEamil(email)) {
       throw new AlreadyExistEmailException();
     }
@@ -23,6 +23,7 @@ export class AuthService {
     const user = new User();
     user.email = email;
     user.password = await this.hashService.hash(password);
+    user.nickname = nickname;
 
     await this.userRepository.save(user);
 
@@ -31,6 +32,7 @@ export class AuthService {
 
   async signin({ email, password }: { email: string; password: string }) {
     const user = await this.userRepository.findOneBy({ email });
+
     if (!user) {
       throw new UserNotFoundException();
     }

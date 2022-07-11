@@ -7,5 +7,12 @@ export class User extends BaseEntity {
   email: string;
 
   @Column()
+  nickname: string;
+
+  @Column()
   password: string;
+
+  updateNickname(nickname: string) {
+    this.nickname = nickname;
+  }
 }

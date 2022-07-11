@@ -29,6 +29,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       synchronize: !this.appConfigService.isProduction(),
       namingStrategy: new SnakeNamingStrategy(),
       maxQueryExecutionTime: this.mysqlConfigService.maxConnectionTimeout,
+      timezone: '+00:00', // DBMS Timezone 설정
     };
   }
 }

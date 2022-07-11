@@ -20,6 +20,7 @@ describe('Auth Service Unit Test', () => {
       // given
       const email = 'test@test.com';
       const password = 'test';
+      const nickname = 'test';
       userRepository = mock(UserRepository);
       when(userRepository.isExistEamil(anyString())).thenResolve(true);
       tokenService = mock(TokenService);
@@ -32,7 +33,7 @@ describe('Auth Service Unit Test', () => {
       authService = new AuthService(instance(userRepository), hashService, instance(tokenService));
 
       // when
-      const result = authService.signup({ email, password });
+      const result = authService.signup({ email, password, nickname });
 
       // then
       await expect(result).rejects.toThrow(AlreadyExistEmailException);
@@ -42,6 +43,7 @@ describe('Auth Service Unit Test', () => {
       // given
       const email = 'test@test.com';
       const password = 'test';
+      const nickname = 'test';
       userRepository = mock(UserRepository);
       when(userRepository.isExistEamil(anyString())).thenResolve(false);
       when(userRepository.save(anything())).thenCall((user: User) => {
@@ -55,7 +57,7 @@ describe('Auth Service Unit Test', () => {
       authService = new AuthService(instance(userRepository), hashService, instance(tokenService));
 
       // when
-      const result = authService.signup({ email, password });
+      const result = authService.signup({ email, password, nickname });
 
       // then
       await expect(result).resolves.toMatchObject({
