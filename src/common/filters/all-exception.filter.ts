@@ -26,9 +26,10 @@ export class AllExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    const convertedExpection = this.convert(exception);
-    const responseEntity = this.getResponse(convertedExpection);
-    const status = convertedExpection.getStatus();
+    const convertedException = this.convert(exception);
+    const responseEntity = this.getResponse(convertedException);
+    const status = convertedException.getStatus();
+    response.locals.error = instanceToPlain(convertedException.getResponse());
 
     if (this.appConfigService.isDevelopment()) {
       this.logger.error(exception.stack);
