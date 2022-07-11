@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import moment, { Moment } from 'moment';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { User } from '../../../app/user/user.entity';
 import { JwtConfigService } from '../../config/jwt/config.service';
 import { InvalidTokenException } from '../../exceptions/invalid-token.exception';
@@ -47,20 +47,36 @@ export class TokenService {
     };
   }
 
-  verifyRefreshToken(token: string, tokenType: TokenType) {
+  async verifyRefreshToken(token: string) {
     try {
       const payload = this.jwtService.verify(token);
       const convertedPaylaod = plainToInstance(TokenPayload, payload);
 
-      if (!tokenType.equals(convertedPaylaod.type)) {
+      if (!TokenType.REFRESH.equals(convertedPaylaod.type)) {
         throw new Error('Invalid Token Type');
       }
 
-      // TODO: 리프레시 토큰을 데이터베이스에 저장하게 된다면 TokenService내에서 또는 다른 Service내에서 처리가 필요하다
+      const foundToken = await this.tokenRepository.findOneBy({
+        token,
+        user: { id: convertedPaylaod.sub },
+        type: Equal(TokenType.REFRESH),
+        isBlackList: false,
+      });
+      if (!foundToken) {
+        throw new Error('Token Not Found');
+      }
 
-      return payload;
+      if (foundToken.isBlackList) {
+        throw new Error('This Token is BlackList');
+      }
+
+      return foundToken;
     } catch (e) {
       throw new InvalidTokenException();
     }
+  }
+
+  async delete(token: Token) {
+    await this.tokenRepository.delete({ id: token.id, token: token.token });
   }
 }

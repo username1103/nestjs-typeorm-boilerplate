@@ -43,4 +43,13 @@ export class AuthService {
 
     return tokens;
   }
+
+  async refreshAuthToken(refreshToken: string) {
+    const foundRefreshToken = await this.tokenService.verifyRefreshToken(refreshToken);
+
+    const tokens = await this.tokenService.generateAuthToken(await foundRefreshToken.user);
+
+    await this.tokenService.delete(foundRefreshToken);
+    return tokens;
+  }
 }
