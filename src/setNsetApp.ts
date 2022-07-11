@@ -1,6 +1,7 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
+import { AppConfigService } from './common/config/app/config.service';
 import { BadParameterException } from './common/exceptions/bad-parameter.exception';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 
@@ -10,7 +11,9 @@ export function setNestApp(app: INestApplication) {
     defaultVersion: '1',
   });
 
-  app.useGlobalFilters(new AllExceptionFilter());
+  const appConfigService = app.get(AppConfigService);
+
+  app.useGlobalFilters(new AllExceptionFilter(appConfigService));
 
   app.useGlobalPipes(
     new ValidationPipe({
