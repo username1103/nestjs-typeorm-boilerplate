@@ -4,6 +4,7 @@ import { ValidationError } from 'class-validator';
 import { AppConfigService } from './common/config/app/config.service';
 import { BadParameterException } from './common/exceptions/bad-parameter.exception';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
+import { ErrorLoggerInterceptor } from './common/interceptors/error-logger.interceptor';
 
 export function setNestApp(app: INestApplication) {
   app.enableVersioning({
@@ -11,9 +12,7 @@ export function setNestApp(app: INestApplication) {
     defaultVersion: '1',
   });
 
-  const appConfigService = app.get(AppConfigService);
-
-  app.useGlobalFilters(new AllExceptionFilter(appConfigService));
+  app.useGlobalFilters(new AllExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -25,5 +24,12 @@ export function setNestApp(app: INestApplication) {
   );
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   app.enableShutdownHooks();
+
+  const appConfigService = app.get(AppConfigService);
+
+  if (appConfigService.isDevelopment()) {
+    app.useGlobalInterceptors(new ErrorLoggerInterceptor());
+  }
 }

@@ -86,6 +86,8 @@ npm run test:unit
 │       ├── exceptions # Custom Exceptions
 │       ├── filters # Custom Filters
 │       ├── guards # Custom Guards
+|       ├── interceptors # Custom Interceptors
+|       ├── middlewares # Custom Middlewares
 │       ├── modules # Common Modules
 │       │   ├── jwt-auth
 │       │   └── token
@@ -190,3 +192,13 @@ async update(@CurrentUser() user: User, @Body() body: PathNicknameRequestDto) {
 ```
 
 ![image](https://user-images.githubusercontent.com/67570061/178225466-3efdaac4-11de-4b99-80db-1266896fc120.png)
+
+## ApiLoggerMiddleware
+
+`ApiSuccessLoggerMiddleware`, `ApiErrorLoggerMiddleware`를 사용해 API요청에 대한 응답 반환
+NestJS의 default logger를 사용하도록 되어있으며 원하는 경우 수정이 필요함
+
+```
+[Nest] 94131  - 2022. 07. 11. 오후 6:26:38   ERROR [ApiErrorLoggerMiddleware] client: ::1 - POST /v1/auth/signin 404 - 28.685 ms - message: 해당하는 유저가 존재하지 않습니다
+data: {"method":"POST","baseUrl":"localhost:3000","url":"/v1/auth/signin","auth":"No tokens","body":{"email":"tes@tst.com","password":"!a12345678"},"params":{},"query":{},"error":{"errorCode":"USER_NOT_FOUND","message":"해당하는 유저가 존재하지 않습니다"}}
+```

@@ -5,12 +5,10 @@ import {
   ExceptionFilter,
   HttpException,
   InternalServerErrorException,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { instanceToPlain } from 'class-transformer';
 import { Response } from 'express';
-import { AppConfigService } from '../config/app/config.service';
 import { ApiNotFoundException } from '../exceptions/api-not-found.exception';
 import { BadParameterException } from '../exceptions/bad-parameter.exception';
 import { ErrorInfo } from '../exceptions/error-info';
@@ -18,22 +16,15 @@ import { ResponseEntity } from '../response/response-entity';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(this.constructor.name);
-
-  constructor(private readonly appConfigService: AppConfigService) {}
-
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+
     const response = ctx.getResponse<Response>();
 
     const convertedException = this.convert(exception);
     const responseEntity = this.getResponse(convertedException);
     const status = convertedException.getStatus();
     response.locals.error = instanceToPlain(convertedException.getResponse());
-
-    if (this.appConfigService.isDevelopment()) {
-      this.logger.error(exception.stack);
-    }
 
     // TODO: 에러테이블 생성 및 저장
 
