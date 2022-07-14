@@ -60,8 +60,8 @@ export class TokenService {
         token,
         user: { id: convertedPaylaod.sub },
         type: Equal(TokenType.REFRESH),
-        isBlackList: false,
       });
+
       if (!foundToken) {
         throw new Error('Token Not Found');
       }

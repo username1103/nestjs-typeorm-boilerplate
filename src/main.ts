@@ -7,9 +7,9 @@ import { setSwagger } from './setSwagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  setNestApp(app);
-
   setSwagger(app);
+
+  setNestApp(app);
 
   const appConfigService = app.get(AppConfigService);
   await app.listen(appConfigService.port);
